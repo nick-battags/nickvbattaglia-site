@@ -1,0 +1,56 @@
+---
+// CRAG pipeline visual — used on /projects/lawagent
+---
+
+<div class="pipeline-diagram font-mono text-xs text-text-dim leading-relaxed overflow-x-auto">
+  <pre class="bg-surface border border-white/8 rounded-xl p-5 text-[0.72rem] leading-5">
+┌─────────────────────────────────────────────────────────────────────┐
+│                     LawAgent CRAG Pipeline                          │
+└─────────────────────────────────────────────────────────────────────┘
+
+  Input (query / draft / prompt)
+          │
+          ▼
+  ┌──────────────────┐
+  │  Flash-Lite       │  ← always-on anonymizer (per-session two-way map)
+  │  Anonymizer      │
+  └──────────┬───────┘
+             │ anonymized text
+             ▼
+  ┌──────────────────┐
+  │  Cohere Embed v4 │  ← embed query → retrieve from Neon pgvector
+  └──────────┬───────┘
+             │ top-k candidates
+             ▼
+  ┌──────────────────┐
+  │  Cohere Rerank   │  ← relevance score per candidate
+  │  3.5             │
+  └──────────┬───────┘
+             │
+    ┌────────┴────────┐
+    │                 │
+  score≥0.72        0.45–0.72
+    │                 │
+    │           GRADER_LLM_ENABLED?
+    │                 │
+    ▼                 ▼
+  generate     Flash-Lite grader → pass→generate / fail→fallback
+    │
+    ▼
+  ┌──────────────────┐
+  │  Gemini 2.5      │  ← issue spotter + missing-clause proposer
+  │  Flash           │     (structured JSON output, ≤14 changes)
+  └──────────┬───────┘
+             │
+             ▼
+  ┌──────────────────┐
+  │  Editing Hub     │  ← user accepts / rejects / rewrites per change
+  └──────────┬───────┘
+             │
+             ▼
+  redline.docx · clean.docx · memo.docx · register.json
+             │
+             ▼
+  Supermemory write (anonymized review_summary, per-session TTL 24h)
+</pre>
+</div>

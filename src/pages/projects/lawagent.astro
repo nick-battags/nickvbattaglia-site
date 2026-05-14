@@ -1,0 +1,107 @@
+---
+import Layout from '../../components/Layout.astro';
+import PipelineDiagram from '../../components/PipelineDiagram.astro';
+import HubCard from '../../components/HubCard.astro';
+---
+
+<Layout
+  title="LawAgent — Nick Battaglia"
+  description="LawAgent: an M&A diligence RAG demo with a Drafting & Review Hub built on Gemini 2.5 Flash, Cohere Rerank 3.5, Neon pgvector, and Supermemory."
+>
+
+  <section class="container pt-20 pb-16 max-w-3xl">
+    <div class="flex flex-wrap gap-2 mb-5">
+      <span class="pill">Portfolio project</span>
+      <span class="pill">Live demo</span>
+    </div>
+
+    <h1 class="font-serif text-4xl sm:text-5xl font-light text-text mb-4 leading-tight">
+      LawAgent
+    </h1>
+    <p class="text-xl text-text-dim leading-relaxed mb-8 max-w-xl">
+      An M&amp;A diligence assistant: Corrective RAG on a curated legal corpus, plus a
+      Drafting &amp; Review Hub for generating, revising, and reviewing contracts.
+    </p>
+
+    <!-- HubCard CTA -->
+    <HubCard />
+
+    <!-- Case study -->
+    <div class="mt-14 space-y-5 text-text-dim leading-relaxed">
+      <h2 class="font-serif text-2xl text-text">The problem</h2>
+      <p>
+        M&amp;A diligence is repetitive, high-stakes, and document-heavy. Junior associates
+        spend hours issue-spotting NDAs and SPAs against playbooks that rarely change.
+        LawAgent asks: what if a retrieval pipeline could do the first pass — flagging
+        weak clauses, proposing missing provisions, and citing its sources — so lawyers
+        spend their time on judgment, not pattern-matching?
+      </p>
+
+      <h2 class="font-serif text-2xl text-text">What I built</h2>
+      <p>
+        LawAgent has two surfaces. The <strong class="text-text">demo</strong> is a Flask app on
+        Cloud Run that runs a Corrective RAG pipeline against a corpus of M&amp;A agreements
+        (MAUD + CUAD + EDGAR filings). The <strong class="text-text">Drafting &amp; Review Hub</strong> is
+        the main product: a two-pane editor where you can generate a contract from a prompt,
+        revise an uploaded draft, or review an existing agreement — with per-clause
+        accept/reject/edit controls, anchored chat, and four downloadable artifacts.
+      </p>
+      <p>
+        The anonymizer runs first on everything: a Flash-Lite pseudonymization layer
+        that maintains a per-session two-way map (24h in-memory TTL, never persisted).
+        Only anonymized summaries ever reach Supermemory, and a PII firewall re-screens
+        before every write.
+      </p>
+
+      <h2 class="font-serif text-2xl text-text" id="pipeline">Pipeline</h2>
+      <PipelineDiagram />
+
+      <h2 class="font-serif text-2xl text-text">Stack</h2>
+      <div class="grid sm:grid-cols-3 gap-3">
+        {[
+          { layer: 'Generation', items: ['Gemini 2.5 Flash', 'Flash-Lite (anonymizer)'] },
+          { layer: 'Retrieval', items: ['Cohere Embed v4', 'Cohere Rerank 3.5', 'Neon pgvector'] },
+          { layer: 'Memory', items: ['Supermemory', 'Per-session 24h TTL'] },
+          { layer: 'Backend', items: ['Flask', 'Cloud Run', 'Neon Postgres'] },
+          { layer: 'Export', items: ['python-docx', 'docx-revisions', 'GCS'] },
+          { layer: 'Infra', items: ['GCP', 'Cloudflare DNS', 'Secret Manager'] },
+        ].map(({ layer, items }) => (
+          <div class="card">
+            <p class="text-xs text-muted uppercase tracking-wider mb-2">{layer}</p>
+            <ul class="space-y-1">
+              {items.map(item => (
+                <li class="text-sm text-text-dim">{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <h2 class="font-serif text-2xl text-text">What I learned</h2>
+      <p>
+        The hardest part was the anonymizer-first data flow. Every piece of text that
+        leaves the user's browser needs to be pseudonymized before it hits the LLM or
+        Supermemory, but the two-way map must stay in process memory only — you can't
+        persist the mapping or you've just created a different PII problem. Getting the
+        session lifecycle right (24h hard TTL, 2h idle TTL, GCS lifecycle rule, Cloud
+        Scheduler sweep) took more iterations than the retrieval pipeline did.
+      </p>
+      <p>
+        Corrective RAG with Cohere Rerank is genuinely better than vanilla vector search
+        for legal text. The reranker understands that "indemnification cap" and "liability
+        ceiling" are the same concept in a way that cosine distance often doesn't.
+      </p>
+    </div>
+
+    <!-- Links -->
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a href="https://lawagent.nickvbattaglia.com" target="_blank" rel="noopener" class="btn-primary">
+        Live demo →
+      </a>
+      <a href="https://github.com/nick-battags/LawAgent" target="_blank" rel="noopener" class="btn-outline">
+        GitHub
+      </a>
+    </div>
+  </section>
+
+</Layout>

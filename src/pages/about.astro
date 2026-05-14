@@ -1,0 +1,56 @@
+---
+import Layout from '../components/Layout.astro';
+---
+
+<Layout
+  title="About — Nick Battaglia"
+  description="JD/MBA candidate at Indiana University Maurer School of Law and Kelley School of Business, software engineer and legal technologist."
+>
+
+  <section class="container pt-20 pb-16 max-w-2xl">
+    <p class="pill mb-5">About</p>
+    <h1 class="font-serif text-4xl sm:text-5xl font-light text-text mb-8 leading-tight">
+      Law, software,<br/>and what's between them.
+    </h1>
+
+    <div class="prose-custom space-y-5 text-text-dim leading-relaxed">
+      <p>
+        I'm a JD/MBA candidate at Indiana University — Maurer School of Law and Kelley School
+        of Business, graduating in 2026. Before law school I spent several years writing
+        production software, which means I think about legal problems differently than most
+        lawyers do: as systems with inputs, outputs, failure modes, and optimization targets.
+      </p>
+      <p>
+        My current focus is legal AI — specifically how retrieval-augmented generation can make
+        M&A diligence faster and more consistent. LawAgent is my portfolio project exploring that:
+        a full CRAG pipeline backed by Gemini 2.5 Flash, Cohere Rerank 3.5, Neon pgvector, and
+        Supermemory, with a Drafting &amp; Review Hub for generating and reviewing contracts.
+      </p>
+      <p>
+        Outside of that I'm interested in transaction structuring, corporate governance, and the
+        intersection of securities law with emerging technology. I've clerked on both sides of
+        complex transactions and find the tension between legal precision and engineering
+        pragmatism endlessly interesting.
+      </p>
+    </div>
+
+    <div class="mt-10 grid sm:grid-cols-2 gap-4">
+      <div class="card">
+        <p class="text-xs text-muted uppercase tracking-wider mb-2">Education</p>
+        <p class="text-sm text-text font-medium">Indiana University</p>
+        <p class="text-sm text-text-dim">Maurer School of Law — JD</p>
+        <p class="text-sm text-text-dim">Kelley School of Business — MBA</p>
+        <p class="text-sm text-muted mt-1">Expected 2026</p>
+      </div>
+      <div class="card">
+        <p class="text-xs text-muted uppercase tracking-wider mb-2">Focus areas</p>
+        <div class="flex flex-wrap gap-1.5 mt-2">
+          {['Legal AI', 'M&A', 'Corporate law', 'RAG systems', 'Contract automation'].map(area => (
+            <span class="pill">{area}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+</Layout>

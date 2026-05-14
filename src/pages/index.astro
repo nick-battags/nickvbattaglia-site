@@ -1,0 +1,61 @@
+---
+import Layout from '../components/Layout.astro';
+import Card from '../components/Card.astro';
+---
+
+<Layout
+  title="Nick Battaglia — Legal Engineer"
+  description="JD/MBA candidate, software engineer, and legal technologist building at the intersection of law and AI."
+>
+
+  <!-- Hero -->
+  <section class="container pt-24 pb-16">
+    <div class="max-w-2xl">
+      <p class="pill mb-5">JD/MBA · Software engineer · Legal technologist</p>
+      <h1 class="font-serif text-5xl sm:text-6xl font-light leading-tight text-text mb-6">
+        Building at the<br/>
+        intersection of<br/>
+        <em class="not-italic text-accent">law and software.</em>
+      </h1>
+      <p class="text-lg text-text-dim leading-relaxed mb-8 max-w-lg">
+        I build legal AI tools and infrastructure — currently focused on M&amp;A diligence automation,
+        RAG pipelines, and making contract review accessible.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href="/projects/lawagent" class="btn-primary">See LawAgent →</a>
+        <a href="/about" class="btn-outline">About me</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Photo strip placeholder -->
+  <section class="container pb-16">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {['Maurer School of Law', 'Bloomington, IN', 'Chicago', 'Portrait'].map(label => (
+        <div class="aspect-square rounded-lg bg-surface border border-white/8 flex items-end p-3">
+          <span class="text-xs text-muted">{label}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Featured project -->
+  <section class="container pb-20">
+    <p class="text-xs text-muted uppercase tracking-widest mb-6">Featured project</p>
+    <div class="grid sm:grid-cols-2 gap-4">
+      <Card
+        title="LawAgent"
+        description="An M&A diligence RAG demo: Drafting & Review Hub for generating, revising, and reviewing contracts — built with Gemini 2.5 Flash, Cohere Rerank 3.5, and Neon pgvector."
+        href="/projects/lawagent"
+        tags={['Flask', 'Vertex AI', 'Cohere', 'Neon', 'Cloud Run']}
+      />
+      <Card
+        title="M&A CRAG Pipeline"
+        description="Corrective Retrieval-Augmented Generation for legal documents: embed → grade → rerank → generate. Issue-spots clauses against a curated M&A corpus."
+        href="/projects/lawagent#pipeline"
+        tags={['CRAG', 'pgvector', 'Supermemory', 'Python']}
+      />
+    </div>
+  </section>
+
+</Layout>

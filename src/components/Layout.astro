@@ -1,0 +1,83 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = 'Nick Battaglia — JD/MBA candidate, software engineer, and legal technologist.',
+  ogImage = '/og-default.png',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="canonical" href={canonicalURL} />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+
+  <!-- OG -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body class="relative">
+
+  <!-- Nav -->
+  <header class="sticky top-0 z-50 border-b border-white/8 bg-bg/90 backdrop-blur-sm">
+    <nav class="container flex items-center justify-between h-14">
+      <a href="/" class="font-serif text-base font-semibold text-text hover:text-accent transition-colors">
+        Nick Battaglia
+      </a>
+      <div class="flex items-center gap-6">
+        <a href="/about" class="text-sm text-text-dim hover:text-text transition-colors">About</a>
+        <a href="/projects/lawagent" class="text-sm text-text-dim hover:text-text transition-colors">Projects</a>
+        <a href="/contact" class="text-sm text-text-dim hover:text-text transition-colors">Contact</a>
+        <a href="https://lawagent.nickvbattaglia.com" target="_blank" rel="noopener"
+           class="btn-primary text-xs py-1.5">
+          Open Hub →
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <slot />
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/8 py-10 mt-20">
+    <div class="container flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-xs text-muted">
+        © {new Date().getFullYear()} Nick Battaglia.
+        AI outputs are not legal advice.
+        <a href="/legal" class="underline hover:text-text-dim">Disclaimer</a>
+      </p>
+      <div class="flex items-center gap-4 text-xs text-muted">
+        <a href="https://github.com/nick-battags" target="_blank" rel="noopener" class="hover:text-text-dim">GitHub</a>
+        <a href="https://linkedin.com/in/nickvbattaglia" target="_blank" rel="noopener" class="hover:text-text-dim">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
