@@ -4,43 +4,46 @@ import Layout from '../components/Layout.astro';
 
 <Layout
   title="About — Nick Battaglia"
-  description="JD/MBA candidate at Indiana University Maurer School of Law and Kelley School of Business, building at the intersection of legal practice and machine learning."
+  description="JD/MBA candidate at Indiana University Maurer School of Law and Kelley School of Business, building at the intersection of law, finance, and technology."
 >
 
   <section class="container pt-20 pb-16 max-w-2xl">
     <p class="pill mb-5">About</p>
     <h1 class="font-serif text-4xl sm:text-5xl font-light text-text mb-8 leading-tight">
-      Law, software,<br/>and what's between them.
+      Law, finance,<br/>and technology.
     </h1>
 
     <div class="prose-custom space-y-5 text-text-dim leading-relaxed">
       <p>
-        I'm a JD/MBA candidate at Indiana University — Maurer School of Law
-        and Kelley School of Business, graduating in 2029. Before law school
-        I worked in data science and product quality / product management,
-        most recently at Acrelec, where I built a GDPR-compliant LightGBM
-        pricing model that improved average revenue per order by 2% and led
-        a company-wide audit of the BI offering. That background means I
-        tend to think about legal problems as systems with inputs, outputs,
-        failure modes, and optimization targets.
+        I'm a dual J.D./M.B.A. candidate at Indiana University's Maurer School
+        of Law and Kelley School of Business (Class of 2029). I'm a Stewart
+        Fellow and Elmore Scholar at Maurer, where I serve as President of the
+        Data, AI &amp; Technology Association and am an associate of the IP
+        Theory journal.
       </p>
       <p>
-        My current focus is legal AI — specifically how retrieval-augmented
-        generation can make M&amp;A diligence faster and more consistent.
-        Argus is the portfolio project exploring that: a full Corrective
-        RAG pipeline backed by Vertex Gemini 2.5 Flash, Cohere Embed v4
-        and Rerank 3.5, Neon pgvector, and Supermemory, with a Drafting
-        &amp; Review Hub for generating and reviewing contracts against
-        an M&amp;A playbook grounded in the CUAD and MAUD academic datasets.
+        My legal interests center on the intersection of technology, data
+        privacy, and finance &mdash; including regulatory policy for AI/ML
+        systems, digital assets, capital markets, and information privacy.
+        Prior to law school I worked at Acrelec doing data science, QA, and
+        product management work; I hold a Series 65 license and a Microsoft
+        Azure Fundamentals certification.
       </p>
       <p>
-        At Maurer I serve as President of the Data, AI &amp; Tech Association,
-        an Associate on the IP Theory journal, a Stewart Fellow, and an
-        Elmore Scholar. This summer I'll be a legal intern with OPL
-        GunnerCooke in Budapest, working primarily on data privacy,
-        regulatory, and legal-technology matters. Outside of that I'm
-        interested in transaction structuring, corporate governance, and
-        the intersection of securities law with emerging technology.
+        This summer (2026), I'll work with OPLGunnerCooke's LegalTech and
+        data privacy groups in Budapest as part of the Stewart Fellows Program.
+        Outside of my coursework, I built <a href="/projects/lawagent" class="text-accent hover:text-accent-strong">Argus</a>
+        &mdash; an M&amp;A drafting and review assistant powered by a Corrective
+        RAG pipeline on Vertex Gemini 2.5 Flash, Cohere Embed v4 and Rerank 3.5,
+        and Neon pgvector &mdash; designed to surface issues in complex contracts
+        while keeping sensitive content under a Flash-Lite anonymization layer
+        that prevents unscrubbed text from ever reaching the LLM.
+      </p>
+      <p>
+        I grew up on Chicago's Northwest Side and am committed to building my
+        career there. I graduated from the University of Iowa's Tippie College
+        of Business in 2024 with a B.B.A. in Business Analytics and Information
+        Systems.
       </p>
     </div>
 
@@ -48,22 +51,22 @@ import Layout from '../components/Layout.astro';
       <div class="card">
         <p class="text-xs text-muted uppercase tracking-wider mb-2">Education</p>
         <p class="text-sm text-text font-medium">Indiana University</p>
-        <p class="text-sm text-text-dim">Maurer School of Law — JD</p>
-        <p class="text-sm text-text-dim">Kelley School of Business — MBA</p>
-        <p class="text-sm text-text-dim mt-2">University of Iowa — BBA, Business Analytics &amp; Information Systems</p>
-        <p class="text-sm text-muted mt-2">Expected 2029 (JD/MBA) · 2024 (BBA)</p>
+        <p class="text-sm text-text-dim">Maurer School of Law &mdash; J.D.</p>
+        <p class="text-sm text-text-dim">Kelley School of Business &mdash; M.B.A.</p>
+        <p class="text-sm text-text-dim mt-2">University of Iowa &mdash; B.B.A., Business Analytics &amp; Information Systems</p>
+        <p class="text-sm text-muted mt-2">Expected 2029 (J.D./M.B.A.) &middot; 2024 (B.B.A.)</p>
       </div>
       <div class="card">
         <p class="text-xs text-muted uppercase tracking-wider mb-2">Focus areas</p>
         <div class="flex flex-wrap gap-1.5 mt-2">
-          {['Legal AI', 'M&A', 'Corporate law', 'RAG systems', 'Data privacy', 'Contract automation'].map(area => (
+          {['Legal AI', 'M&A', 'Data privacy', 'Digital assets', 'Capital markets', 'AI/ML policy'].map(area => (
             <span class="pill">{area}</span>
           ))}
         </div>
         <p class="text-xs text-muted uppercase tracking-wider mt-5 mb-2">Credentials</p>
         <div class="flex flex-wrap gap-1.5">
           <span class="pill">Series 65</span>
-          <span class="pill">AZ-900</span>
+          <span class="pill">Azure AZ-900</span>
         </div>
       </div>
     </div>

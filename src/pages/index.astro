@@ -4,22 +4,23 @@ import Card from '../components/Card.astro';
 ---
 
 <Layout
-  title="Nick Battaglia — Legal Engineer"
-  description="JD/MBA candidate, software engineer, and legal technologist building at the intersection of law and AI."
+  title="Nick Battaglia"
+  description="JD/MBA candidate at Indiana University, building legal AI tools and infrastructure for M&A diligence."
 >
 
   <!-- Hero -->
   <section class="container pt-24 pb-16">
     <div class="max-w-2xl">
-      <p class="pill mb-5">JD/MBA · Software engineer · Legal technologist</p>
-      <h1 class="font-serif text-5xl sm:text-6xl font-light leading-tight text-text mb-6">
-        Building at the<br/>
-        intersection of<br/>
-        <em class="not-italic text-accent">law and software.</em>
+      <p class="pill mb-5">JD/MBA candidate &middot; Indiana University</p>
+      <h1 class="font-serif text-4xl sm:text-5xl font-light leading-tight text-text mb-6">
+        Preparing for the next<br/>
+        generation of transactional work<br/>
+        <em class="not-italic text-accent">at the intersection of law, finance,<br/>and technology.</em>
       </h1>
       <p class="text-lg text-text-dim leading-relaxed mb-8 max-w-lg">
-        I build legal AI tools and infrastructure — currently focused on M&amp;A diligence automation,
-        RAG pipelines, and making contract review accessible.
+        JD/MBA candidate at Indiana University, with a background in data science,
+        QA, and product management. My portfolio project Argus is an M&amp;A
+        drafting and review demo on Vertex Gemini, Cohere, and Neon pgvector.
       </p>
       <div class="flex flex-wrap gap-3">
         <a href="/projects/lawagent" class="btn-primary">See Argus →</a>
@@ -28,34 +29,39 @@ import Card from '../components/Card.astro';
     </div>
   </section>
 
-  <!-- Photo strip placeholder -->
+  <!-- Quick-stats row -->
   <section class="container pb-16">
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-      {['Maurer School of Law', 'Bloomington, IN', 'Chicago', 'Portrait'].map(label => (
-        <div class="aspect-square rounded-lg bg-surface border border-border flex items-end p-3">
-          <span class="text-xs text-muted">{label}</span>
-        </div>
-      ))}
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 border-t border-border pt-8">
+      <div>
+        <p class="text-xs text-muted uppercase tracking-widest mb-2">Education</p>
+        <p class="text-sm text-text leading-relaxed">
+          Indiana University &mdash; Maurer School of Law &amp; Kelley School of Business. J.D./M.B.A., Class of 2029.
+        </p>
+      </div>
+      <div>
+        <p class="text-xs text-muted uppercase tracking-widest mb-2">Summer 2026</p>
+        <p class="text-sm text-text leading-relaxed">
+          Legal intern at OPLGunnerCooke in Budapest, focused on LegalTech and data privacy, as a Stewart Fellow.
+        </p>
+      </div>
+      <div>
+        <p class="text-xs text-muted uppercase tracking-widest mb-2">Portfolio</p>
+        <p class="text-sm text-text leading-relaxed">
+          <a href="/projects/lawagent" class="text-accent hover:text-accent-strong">Argus</a> &mdash; an M&amp;A drafting and review demo on Vertex Gemini, Cohere, and Neon pgvector.
+        </p>
+      </div>
     </div>
   </section>
 
   <!-- Featured project -->
   <section class="container pb-20">
     <p class="text-xs text-muted uppercase tracking-widest mb-6">Featured project</p>
-    <div class="grid sm:grid-cols-2 gap-4">
-      <Card
-        title="Argus"
-        description="An M&A drafting and review demo: generate, revise, or redline contracts in a track-changes workspace, or chat with an 11K-chunk M&A corpus — built on Vertex Gemini 2.5 Flash, Cohere Embed v4 + Rerank 3.5, and Neon pgvector."
-        href="/projects/lawagent"
-        tags={['Flask', 'Vertex AI', 'Cohere', 'Neon', 'Cloud Run']}
-      />
-      <Card
-        title="M&A CRAG Pipeline"
-        description="Corrective Retrieval-Augmented Generation for legal documents: anonymize → embed → retrieve → rerank → generate. Spots issues against a curated playbook + CUAD + MAUD corpus."
-        href="/projects/lawagent#pipeline"
-        tags={['CRAG', 'pgvector', 'Supermemory', 'Python']}
-      />
-    </div>
+    <Card
+      title="Argus"
+      description="An M&A drafting and review demo: generate, revise, or redline contracts in a track-changes workspace, or chat with an 11K-chunk M&A corpus. Corrective RAG pipeline — anonymize → embed → retrieve → rerank → generate — built on Vertex Gemini 2.5 Flash, Cohere Embed v4 + Rerank 3.5, Neon pgvector, and Supermemory."
+      href="/projects/lawagent"
+      tags={['Flask', 'Vertex AI', 'Cohere Rerank 3.5', 'Neon pgvector', 'Supermemory', 'Cloud Run', 'CRAG']}
+    />
   </section>
 
 </Layout>
