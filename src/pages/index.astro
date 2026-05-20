@@ -22,7 +22,7 @@ import Card from '../components/Card.astro';
         RAG pipelines, and making contract review accessible.
       </p>
       <div class="flex flex-wrap gap-3">
-        <a href="/projects/lawagent" class="btn-primary">See LawAgent →</a>
+        <a href="/projects/lawagent" class="btn-primary">See Argus →</a>
         <a href="/about" class="btn-outline">About me</a>
       </div>
     </div>
@@ -44,14 +44,14 @@ import Card from '../components/Card.astro';
     <p class="text-xs text-muted uppercase tracking-widest mb-6">Featured project</p>
     <div class="grid sm:grid-cols-2 gap-4">
       <Card
-        title="LawAgent"
-        description="An M&A diligence RAG demo: Drafting & Review Hub for generating, revising, and reviewing contracts — built with Gemini 2.5 Flash, Cohere Rerank 3.5, and Neon pgvector."
+        title="Argus"
+        description="An M&A drafting and review demo: generate, revise, or redline contracts in a track-changes workspace, or chat with an 11K-chunk M&A corpus — built on Vertex Gemini 2.5 Flash, Cohere Embed v4 + Rerank 3.5, and Neon pgvector."
         href="/projects/lawagent"
         tags={['Flask', 'Vertex AI', 'Cohere', 'Neon', 'Cloud Run']}
       />
       <Card
         title="M&A CRAG Pipeline"
-        description="Corrective Retrieval-Augmented Generation for legal documents: embed → grade → rerank → generate. Issue-spots clauses against a curated M&A corpus."
+        description="Corrective Retrieval-Augmented Generation for legal documents: anonymize → embed → retrieve → rerank → generate. Spots issues against a curated playbook + CUAD + MAUD corpus."
         href="/projects/lawagent#pipeline"
         tags={['CRAG', 'pgvector', 'Supermemory', 'Python']}
       />

@@ -5,8 +5,8 @@ import HubCard from '../../components/HubCard.astro';
 ---
 
 <Layout
-  title="LawAgent — Nick Battaglia"
-  description="LawAgent: an M&A diligence RAG demo with a Drafting & Review Hub built on Gemini 2.5 Flash, Cohere Rerank 3.5, Neon pgvector, and Supermemory."
+  title="Argus — Nick Battaglia"
+  description="Argus: an M&A drafting and review demo with a track-changes Hub and corpus chat, built on Vertex Gemini 2.5 Flash, Cohere Embed v4 + Rerank 3.5, Neon pgvector, and Supermemory."
 >
 
   <section class="container pt-20 pb-16 max-w-3xl">
@@ -16,11 +16,12 @@ import HubCard from '../../components/HubCard.astro';
     </div>
 
     <h1 class="font-serif text-4xl sm:text-5xl font-light text-text mb-4 leading-tight">
-      LawAgent
+      Argus
     </h1>
     <p class="text-xl text-text-dim leading-relaxed mb-8 max-w-xl">
-      An M&amp;A diligence assistant: Corrective RAG on a curated legal corpus, plus a
-      Drafting &amp; Review Hub for generating, revising, and reviewing contracts.
+      An M&amp;A drafting and review assistant. A track-changes Hub for generating, revising,
+      and redlining contracts &mdash; plus a NotebookLM-style chat grounded in 11,266 M&amp;A
+      corpus chunks.
     </p>
 
     <!-- HubCard CTA -->
@@ -32,19 +33,21 @@ import HubCard from '../../components/HubCard.astro';
       <p>
         M&amp;A diligence is repetitive, high-stakes, and document-heavy. Junior associates
         spend hours issue-spotting NDAs and SPAs against playbooks that rarely change.
-        LawAgent asks: what if a retrieval pipeline could do the first pass — flagging
-        weak clauses, proposing missing provisions, and citing its sources — so lawyers
+        Argus asks: what if a retrieval pipeline could do the first pass &mdash; flagging
+        weak clauses, proposing missing provisions, and citing its sources &mdash; so lawyers
         spend their time on judgment, not pattern-matching?
       </p>
 
       <h2 class="font-serif text-2xl text-text">What I built</h2>
       <p>
-        LawAgent has two surfaces. The <strong class="text-text">demo</strong> is a Flask app on
-        Cloud Run that runs a Corrective RAG pipeline against a corpus of M&amp;A agreements
-        (MAUD + CUAD + EDGAR filings). The <strong class="text-text">Drafting &amp; Review Hub</strong> is
-        the main product: a two-pane editor where you can generate a contract from a prompt,
-        revise an uploaded draft, or review an existing agreement — with per-clause
-        accept/reject/edit controls, anchored chat, and four downloadable artifacts.
+        Argus has two surfaces. The <strong class="text-text">Drafting &amp; Review Hub</strong>
+        is the main product: a two-pane editor where you can generate a contract from a prompt,
+        revise an uploaded draft, or review an existing agreement &mdash; with per-clause
+        accept/reject/edit controls, anchored chat, and four downloadable artifacts
+        (redline.docx, clean.docx, memo.docx, register.json). The
+        <strong class="text-text">Ask the Corpus</strong> surface is a NotebookLM-style chat
+        grounded in a 22-category playbook plus ~7,067 CUAD commercial-contract spans and
+        ~4,177 MAUD merger-agreement spans, all indexed in Neon pgvector.
       </p>
       <p>
         The anonymizer runs first on everything: a Flash-Lite pseudonymization layer
