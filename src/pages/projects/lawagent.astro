@@ -71,8 +71,8 @@ import HubCard from '../../components/HubCard.astro';
       <div class="grid sm:grid-cols-3 gap-3">
         {[
           { layer: 'Generation', items: ['Vertex Gemini 2.5 Flash', 'Gemini 2.5 Flash-Lite (anonymizer)'] },
-          { layer: 'Retrieval', items: ['Cohere Embed v4 (1024-dim)', 'Cohere Rerank 3.5', 'Neon pgvector (IVFFlat)'] },
-          { layer: 'Memory', items: ['Supermemory', 'kind=chat_exchange / context / review_summary', '24h TTL'] },
+          { layer: 'Retrieval', items: ['Cohere Embed v4 (1024-dim)', 'Cohere Rerank 3.5', 'Neon pgvector (HNSW)'] },
+          { layer: 'Memory', items: ['Supermemory', 'kind=chat_exchange / context / review_summary', 'Session-scoped, anonymized writes only'] },
           { layer: 'Backend', items: ['Flask + gunicorn', 'Cloud Run (min-instances=1)', 'Neon Postgres'] },
           { layer: 'Export', items: ['python-docx', 'docx-revisions (native <w:ins>/<w:del>)'] },
           { layer: 'Infra', items: ['Google Cloud Platform', 'Cloudflare DNS + Pages', 'Secret Manager'] },

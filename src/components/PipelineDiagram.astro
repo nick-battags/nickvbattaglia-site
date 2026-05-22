@@ -1,81 +1,22 @@
 ---
-// CRAG pipeline visual — used on /projects/lawagent
+// Argus CRAG pipeline diagram — used on /projects/lawagent
+// SVG source lives at /public/argus-pipeline.svg and is mirrored to the
+// LawAgent demo at /static/argus-pipeline.svg so both surfaces display
+// the identical diagram. Update the SVG in one place, copy to the other.
 ---
 
-<div class="pipeline-diagram font-mono text-xs text-text-dim leading-relaxed overflow-x-auto">
-  <pre class="bg-surface border border-border rounded-xl p-5 text-[0.72rem] leading-5 font-mono">
-┌─────────────────────────────────────────────────────────────────────┐
-│                      Argus CRAG Pipeline                            │
-└─────────────────────────────────────────────────────────────────────┘
-
-  Input (query / draft / prompt)
-          │
-          ▼
-  ┌──────────────────┐
-  │  Flash-Lite       │  PROCESS: replace named entities with stable placeholders
-  │  Anonymizer       │           (PARTY_A, ORG_001, ...). Per-session two-way map
-  │                   │           lives in server process memory only. Never written
-  │                   │           to disk or any third-party store.
-  └──────────┬───────┘
-             │ anonymized text
-             ▼
-  ┌──────────────────┐
-  │  Cohere Embed v4 │  PROCESS: 1024-dim embedding of the anonymized query.
-  │  (1024-dim)      │           Same model used at corpus ingest time so the
-  │                   │           vector space matches the index.
-  └──────────┬───────┘
-             │ query vector
-             ▼
-  ┌══════════════════┐
-  ║  Neon pgvector   ║  DATA LAYER: 11,266 corpus chunks (22 playbook +
-  ║  (IVFFlat)       ║              7,067 CUAD + 4,177 MAUD).
-  ║                   ║  PROCESS:    cosine-similarity → top-12 candidates.
-  └══════════┬═══════┘
-             │ top-12 + optional session context (see ↓)
-             │
-             │      ┌══════════════════┐
-             │      ║  Supermemory     ║  DATA LAYER: per-session uploaded
-             │ ←─── ║  kind=context    ║  documents (NotebookLM-style "Add
-             │      ║  (read)          ║  source"). Skipped when session has
-             │      └══════════════════┘  no uploads.
-             ▼
-  ┌──────────────────┐
-  │  Cohere Rerank   │  PROCESS: cross-encoder re-scores candidates by
-  │  3.5  [Hub only] │           semantic relevance. Catches paraphrases
-  │                   │           that cosine distance misses.
-  └──────────┬───────┘
-             │ reranked context
-             ▼
-  ┌──────────────────┐
-  │  Gemini 2.5      │  PROCESS: generate.
-  │  Flash           │           Hub  → structured JSON, ≤14 issues + drafts
-  │                   │           Chat → streamed prose + [n] citations
-  └──────────┬───────┘
-             │
-   ┌─────────┴─────────────────────────────────┐
-   │                                           │
-   ▼  Drafting & Review Hub                    ▼  Ask the Corpus
-  ┌──────────────────┐                        ┌──────────────────┐
-  │  Editing Hub     │   PROCESS: per-change  │  Stream answer   │   PROCESS: token-by-
-  │  workspace       │   accept / reject /    │  to browser via  │   token SSE; rehydrate
-  │                   │   inline rewrite      │  Server-Sent     │   placeholders →
-  │                   │                        │  Events          │   original names
-  └──────────┬───────┘                        └──────────┬───────┘
-             │ baked artifacts                            │
-             ▼                                            ▼
-  redline.docx · clean.docx ·                   ┌══════════════════┐
-  memo.docx · register.json                     ║ Supermemory      ║  DATA LAYER:
-             │                                  ║ kind=            ║  anonymized
-             ▼                                  ║ chat_exchange    ║  Q&A pair,
-  ┌══════════════════┐                          ║ (write)          ║  TTL 24h.
-  ║  Supermemory     ║  DATA LAYER: anonymized  └══════════════════┘
-  ║ kind=review_     ║  bake summary with
-  ║  summary (write) ║  ≤14 change records.
-  └══════════════════┘  TTL 24h.
-
-  ↪ PII firewall regex re-screens every Supermemory write (second layer of defense)
-  ↪ Anonymizer rehydrates entity names on the way back to the user before display
-  ↪ Per-session 24h TTL on all Supermemory data (server-side, account-level setting)
-  ↪ All in-process state (anonymizer map, gunicorn cache) discarded on worker recycle
-</pre>
-</div>
+<figure class="pipeline-diagram my-6">
+  <div class="rounded-xl border border-border bg-surface p-3 sm:p-5 overflow-x-auto">
+    <img
+      src="/argus-pipeline.svg"
+      alt="Argus Corrective RAG pipeline: anonymize → embed → retrieve from Neon pgvector → rerank → Gemini → branch to Hub artifacts or Chat stream → Supermemory write"
+      class="block w-full h-auto"
+      loading="lazy"
+    />
+  </div>
+  <figcaption class="text-xs text-muted text-center mt-3 italic">
+    Boxes with a double burgundy border are persistent data layers; single-border boxes are compute steps. The
+    optional dashed inbound arrow at the pgvector stage is the per-session context read from Supermemory, skipped
+    when the session has no uploaded documents.
+  </figcaption>
+</figure>
