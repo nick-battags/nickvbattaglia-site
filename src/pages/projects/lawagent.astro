@@ -46,14 +46,22 @@ import HubCard from '../../components/HubCard.astro';
         accept/reject/edit controls, anchored chat, and four downloadable artifacts
         (redline.docx, clean.docx, memo.docx, register.json). The
         <strong class="text-text">Ask the Corpus</strong> surface is a NotebookLM-style chat
-        grounded in a 22-category playbook plus ~7,067 CUAD commercial-contract spans and
-        ~4,177 MAUD merger-agreement spans, all indexed in Neon pgvector.
+        grounded in 11,266 corpus chunks indexed in Neon pgvector: a curated 22-category
+        M&amp;A playbook plus ~7,067 spans from <a href="https://www.atticusprojectai.org/cuad" target="_blank" rel="noopener" class="text-accent hover:text-accent-strong">CUAD</a>
+        (the Contract Understanding Atticus Dataset, Hendrycks et al., NeurIPS 2021) and
+        ~4,177 spans from <a href="https://github.com/TheAtticusProject/maud" target="_blank" rel="noopener" class="text-accent hover:text-accent-strong">MAUD</a>
+        (the Merger Agreement Understanding Dataset, Wang et al., NLLP @ EMNLP 2023).
       </p>
       <p>
-        The anonymizer runs first on everything: a Flash-Lite pseudonymization layer
-        that maintains a per-session two-way map (24h in-memory TTL, never persisted).
-        Only anonymized summaries ever reach Supermemory, and a PII firewall re-screens
-        before every write.
+        The anonymizer runs first on every input across both surfaces. A Gemini
+        2.5 Flash-Lite call replaces named entities with stable placeholders
+        (<code>PARTY_A</code>, <code>ORG_001</code>, etc.), maintained in a
+        per-session two-way map that lives in process memory only (24h TTL,
+        never persisted to disk or any third-party store). Pseudonymized text
+        is what reaches Cohere, Vertex, and Supermemory; the user sees their
+        original entity names restored via rehydration on the way back. A
+        regex PII firewall re-screens content before each Supermemory write
+        as a second layer of defense.
       </p>
 
       <h2 class="font-serif text-2xl text-text" id="pipeline">Pipeline</h2>
@@ -62,12 +70,12 @@ import HubCard from '../../components/HubCard.astro';
       <h2 class="font-serif text-2xl text-text">Stack</h2>
       <div class="grid sm:grid-cols-3 gap-3">
         {[
-          { layer: 'Generation', items: ['Gemini 2.5 Flash', 'Flash-Lite (anonymizer)'] },
-          { layer: 'Retrieval', items: ['Cohere Embed v4', 'Cohere Rerank 3.5', 'Neon pgvector'] },
-          { layer: 'Memory', items: ['Supermemory', 'Per-session 24h TTL'] },
-          { layer: 'Backend', items: ['Flask', 'Cloud Run', 'Neon Postgres'] },
-          { layer: 'Export', items: ['python-docx', 'docx-revisions', 'GCS'] },
-          { layer: 'Infra', items: ['GCP', 'Cloudflare DNS', 'Secret Manager'] },
+          { layer: 'Generation', items: ['Vertex Gemini 2.5 Flash', 'Gemini 2.5 Flash-Lite (anonymizer)'] },
+          { layer: 'Retrieval', items: ['Cohere Embed v4 (1024-dim)', 'Cohere Rerank 3.5', 'Neon pgvector (IVFFlat)'] },
+          { layer: 'Memory', items: ['Supermemory', 'kind=chat_exchange / context / review_summary', '24h TTL'] },
+          { layer: 'Backend', items: ['Flask + gunicorn', 'Cloud Run (min-instances=1)', 'Neon Postgres'] },
+          { layer: 'Export', items: ['python-docx', 'docx-revisions (native <w:ins>/<w:del>)'] },
+          { layer: 'Infra', items: ['Google Cloud Platform', 'Cloudflare DNS + Pages', 'Secret Manager'] },
         ].map(({ layer, items }) => (
           <div class="card">
             <p class="text-xs text-muted uppercase tracking-wider mb-2">{layer}</p>
@@ -82,17 +90,29 @@ import HubCard from '../../components/HubCard.astro';
 
       <h2 class="font-serif text-2xl text-text">What I learned</h2>
       <p>
-        The hardest part was the anonymizer-first data flow. Every piece of text that
-        leaves the user's browser needs to be pseudonymized before it hits the LLM or
-        Supermemory, but the two-way map must stay in process memory only — you can't
-        persist the mapping or you've just created a different PII problem. Getting the
-        session lifecycle right (24h hard TTL, 2h idle TTL, GCS lifecycle rule, Cloud
-        Scheduler sweep) took more iterations than the retrieval pipeline did.
+        The hardest part was the anonymizer-first data flow. Every piece of text the
+        user submits has to be pseudonymized before it reaches Cohere, Gemini, or
+        Supermemory &mdash; but the two-way pseudonym map must stay in process memory
+        only. Persisting it anywhere recreates the PII problem you were trying to
+        solve. The map lives behind a per-session lock with a 24h in-memory TTL and
+        gets garbage-collected when the worker recycles.
       </p>
       <p>
-        Corrective RAG with Cohere Rerank is genuinely better than vanilla vector search
-        for legal text. The reranker understands that "indemnification cap" and "liability
+        Cohere Rerank 3.5 is genuinely better than vanilla vector search for legal
+        text. The reranker understands that "indemnification cap" and "liability
         ceiling" are the same concept in a way that cosine distance often doesn't.
+        Spent the most iteration time on the Hub side where retrieval quality
+        determines whether the spotter flags real issues or generic ones.
+      </p>
+      <p>
+        Validation matters more than I expected. v1.1.1 caught four silent failures
+        in the Supermemory write path that all happened to mask one another:
+        the standalone chat surface was missing the write code entirely; the PII
+        heuristic substring-matched "ein" inside common English words; the
+        Supermemory SDK changed its API surface (<code>client.memories.add</code> →
+        <code>client.add</code>); and the test prompt I used didn't reference enough
+        entity names to exercise rehydration. Each one looked like a deploy
+        problem until logs proved otherwise.
       </p>
     </div>
 
